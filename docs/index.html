@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BRRRR Deal Analyzer — The Bull Brew</title>
+<meta name="description" content="Run the full BRRRR loop — Buy, Rehab, Rent, Refinance, Repeat — and see exactly how much cash stays trapped in the deal.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <div class="brand">THE BULL BREW</div>
+    <h1>BRRRR Deal Analyzer</h1>
+    <p class="lede">Buy. Rehab. Rent. Refinance. Repeat. Enter the deal — the analyzer walks the full loop and tells you exactly how much cash stays trapped.</p>
+  </header>
+
+  <div id="verdict" class="verdict" aria-live="polite"></div>
+
+  <main class="layout">
+
+    <section class="panel inputs" aria-label="Deal inputs">
+      <h2>The Deal</h2>
+
+      <fieldset>
+        <legend>Acquisition &amp; Rehab</legend>
+        <label>Purchase price
+          <span class="field"><span class="prefix">$</span><input id="in-purchase" type="number" min="0" step="1000" inputmode="decimal"></span>
+        </label>
+        <label>Rehab cost
+          <span class="field"><span class="prefix">$</span><input id="in-rehab" type="number" min="0" step="1000" inputmode="decimal"></span>
+        </label>
+        <label>After-repair value (ARV)
+          <span class="field"><span class="prefix">$</span><input id="in-arv" type="number" min="0" step="1000" inputmode="decimal"></span>
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Financing</legend>
+        <label>Down payment
+          <span class="field"><input id="in-downpct" type="number" min="0" max="100" step="1" inputmode="decimal"><span class="suffix">%</span></span>
+        </label>
+        <label>Interest rate
+          <span class="field"><input id="in-rate" type="number" min="0" max="30" step="0.125" inputmode="decimal"><span class="suffix">%</span></span>
+        </label>
+        <label>Loan term
+          <span class="field"><input id="in-term" type="number" min="1" max="40" step="1" inputmode="numeric"><span class="suffix">yrs</span></span>
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Income &amp; Expenses</legend>
+        <label>Monthly rent
+          <span class="field"><span class="prefix">$</span><input id="in-rent" type="number" min="0" step="25" inputmode="decimal"></span>
+        </label>
+        <div class="grid2">
+          <label>Property tax <span class="hint">/yr</span>
+            <span class="field"><span class="prefix">$</span><input id="in-tax" type="number" min="0" step="100" inputmode="decimal"></span>
+          </label>
+          <label>Insurance <span class="hint">/yr</span>
+            <span class="field"><span class="prefix">$</span><input id="in-ins" type="number" min="0" step="100" inputmode="decimal"></span>
+          </label>
+          <label>Vacancy
+            <span class="field"><input id="in-vac" type="number" min="0" max="50" step="1" inputmode="decimal"><span class="suffix">%</span></span>
+          </label>
+          <label>Maintenance
+            <span class="field"><input id="in-maint" type="number" min="0" max="50" step="1" inputmode="decimal"><span class="suffix">%</span></span>
+          </label>
+          <label>CapEx
+            <span class="field"><input id="in-capex" type="number" min="0" max="50" step="1" inputmode="decimal"><span class="suffix">%</span></span>
+          </label>
+          <label>Management
+            <span class="field"><input id="in-mgmt" type="number" min="0" max="50" step="1" inputmode="decimal"><span class="suffix">%</span></span>
+          </label>
+        </div>
+      </fieldset>
+
+      <div class="actions">
+        <button id="btn-demo" class="btn ghost" type="button">Reset demo deal</button>
+      </div>
+      <p class="fineprint">Assumes the acquisition loan balance is unchanged at refinance and excludes closing costs. Refinance modeled as a 75% cash-out of ARV. Educational estimates — not financial advice.</p>
+    </section>
+
+    <section class="panel results" aria-label="Analysis results">
+      <h2>The Loop</h2>
+      <ol class="steps">
+        <li class="step" id="step-buy">
+          <div class="step-name">Buy</div>
+          <div class="step-lines"></div>
+        </li>
+        <li class="step" id="step-rehab">
+          <div class="step-name">Rehab</div>
+          <div class="step-lines"></div>
+        </li>
+        <li class="step" id="step-rent">
+          <div class="step-name">Rent</div>
+          <div class="step-lines"></div>
+        </li>
+        <li class="step" id="step-refi">
+          <div class="step-name">Refinance</div>
+          <div class="step-lines"></div>
+        </li>
+        <li class="step" id="step-repeat">
+          <div class="step-name">Repeat</div>
+          <div class="step-lines"></div>
+        </li>
+      </ol>
+
+      <h2>Scorecard</h2>
+      <dl class="metrics">
+        <div class="metric"><dt>Total cash invested</dt><dd id="m-invested">—</dd></div>
+        <div class="metric"><dt>Refinance proceeds</dt><dd id="m-proceeds">—</dd></div>
+        <div class="metric highlight"><dt>Cash left in the deal</dt><dd id="m-left">—</dd></div>
+        <div class="metric"><dt>Monthly cash flow</dt><dd id="m-cashflow">—</dd></div>
+        <div class="metric"><dt>Cash-on-cash return</dt><dd id="m-coc">—</dd></div>
+        <div class="metric"><dt>DSCR</dt><dd id="m-dscr">—</dd></div>
+      </dl>
+    </section>
+
+  </main>
+
+  <footer class="colophon">
+    <span>THE BULL BREW</span><span class="dot">◆</span><span>Free investor tools</span>
+  </footer>
+
+</div>
+<script src="app.js"></script>
+</body>
+</html>
